@@ -19,7 +19,7 @@ class UserRegisterSerializer(ModelSerializer):
         fields = [
             'username',
             'email',
-            'email2'
+            'email2',
             'password',
             'password2',
         ]
@@ -37,16 +37,16 @@ class UserRegisterSerializer(ModelSerializer):
 
         def validate_email(self, value):  #check if email matches confirm email
             data = self.get_initial()
-            email1 = data.get("email")
-            email2 = value
+            email2 = data.get("email2")
+            email1 = value
             if email1 != email2:
                 raise ValidationError("Emails must match")
             return value
 
         def validate_email2(self, value):  #check if confirm email matches email
             data = self.get_initial()
-            email2 = data.get("email2")
-            email1 = value
+            email1 = data.get("email")
+            email2 = value
             if email1 != email2:
                 raise ValidationError("Emails must match")
             return value
