@@ -1,4 +1,4 @@
-from django.contrib.auth import get_user_model
+# from django.contrib.auth import get_user_model
 from django.db.models import Q
 from rest_framework.serializers import (
     CharField,
@@ -6,14 +6,13 @@ from rest_framework.serializers import (
     ModelSerializer,
     ValidationError,
 )
-
-User = get_user_model()
+from accounts.models import User
 
 class UserRegisterSerializer(ModelSerializer):
-    email = EmailField(label = 'Email')
-    email2 = EmailField(label = 'Confirm email') #to confirm email
-    password = CharField(style={'input-type' : 'password'}, label='Password')
-    password2 = CharField(style={'input-type' : 'password'}, label='Confirm Password') #to confirm password
+    # email = EmailField(label = 'Email')
+    # email2 = EmailField(label = 'Confirm email') #to confirm email
+    # password = CharField(style={'input-type' : 'password'}, label='Password')
+    # password2 = CharField(style={'input-type' : 'password'}, label='Confirm Password') #to confirm password
     class Meta:
         model = User
         fields = [
@@ -80,8 +79,8 @@ class UserRegisterSerializer(ModelSerializer):
             return validated_data
 
 class UserLoginSerializer(ModelSerializer):
-    username = CharField(required=False, allow_blank=True)  #not required field
-    email = CharField(required=False, allow_blank=True, label="Email") #not required field
+    # username = CharField(required=False, allow_blank=True)  #not required field
+    # email = CharField(required=False, allow_blank=True, label="Email") #not required field
     class Meta:
         model = User
         fields = [
