@@ -1,4 +1,4 @@
-# from django.contrib.auth import get_user_model
+from django.contrib.auth import get_user_model
 from django.db.models import Q
 from rest_framework.serializers import (
     CharField,
@@ -6,11 +6,14 @@ from rest_framework.serializers import (
     ModelSerializer,
     ValidationError,
 )
-from accounts.models import User
+
+# from accounts.models import User
+
+User = get_user_model()
 
 class UserRegisterSerializer(ModelSerializer):
-    # email = EmailField(label = 'Email')
-    # email2 = EmailField(label = 'Confirm email') #to confirm email
+    email = EmailField(label = 'Email')
+    email2 = EmailField(label = 'Confirm Email') #to confirm email
     # password = CharField(style={'input-type' : 'password'}, label='Password')
     # password2 = CharField(style={'input-type' : 'password'}, label='Confirm Password') #to confirm password
     class Meta:
@@ -20,11 +23,12 @@ class UserRegisterSerializer(ModelSerializer):
             'email',
             'email2',
             'password',
-            'password2',
+            # 'password2',
         ]
         extra_kwargs = {
             'password' : {'write_only' : True},  #passwords write only
-            'password2' : {'write_only' : True},
+            # 'password2' : {'write_only' : True}
+            # 'email2' : {'write_only' : True }
         }
 
         def validate(self, data):  # check if given email already exists
@@ -34,15 +38,15 @@ class UserRegisterSerializer(ModelSerializer):
                 raise ValidationError("This email already exists, try again with a new email.")
             return data
 
-        def validate_email(self, value):  #check if email matches confirm email
+        def validate_email(self, value):
             data = self.get_initial()
-            email2 = data.get("email2")
-            email1 = value
+            email1 = data.get("email2")
+            email2 = value
             if email1 != email2:
                 raise ValidationError("Emails must match")
             return value
 
-        def validate_email2(self, value):  #check if confirm email matches email
+        def validate_email2(self, value):
             data = self.get_initial()
             email1 = data.get("email")
             email2 = value
@@ -50,21 +54,21 @@ class UserRegisterSerializer(ModelSerializer):
                 raise ValidationError("Emails must match")
             return value
 
-        def validate_password(self, value):  #check if password matches confirm password
-            data = self.get_initial()
-            password1 = data.get("password")
-            password2 = value
-            if password1 != password2:
-                raise ValidationError("Passwords must match.")
-            return value
-
-        def validate_password2(self, value): #check if confirm password matches password
-            data = self.get_initial()
-            password2 = data.get("password")
-            password1 = value
-            if password1 != password2:
-                raise ValidationError("Passwords must match.")
-            return value
+        # def validate_password(self, value):  #check if password matches confirm password
+        #     data = self.get_initial()
+        #     password1 = data.get("password2")
+        #     password2 = value
+        #     if password1 != password2:
+        #         raise ValidationError("Passwords must match.")
+        #     return value
+        #
+        # def validate_password2(self, value): #check if confirm password matches password
+        #     data = self.get_initial()
+        #     password1 = data.get("password")
+        #     password2 = value
+        #     if password1 != password2:
+        #         raise ValidationError("Passwords must match.")
+        #     return value
 
         def create(self, validated_data):
             username = validated_data["username"]
@@ -79,8 +83,8 @@ class UserRegisterSerializer(ModelSerializer):
             return validated_data
 
 class UserLoginSerializer(ModelSerializer):
-    # username = CharField(required=False, allow_blank=True)  #not required field
-    # email = CharField(required=False, allow_blank=True, label="Email") #not required field
+    username = CharField(required=False, allow_blank=True)  #not required field
+    email = CharField(required=False, allow_blank=True, label="Email") #not required field
     class Meta:
         model = User
         fields = [
