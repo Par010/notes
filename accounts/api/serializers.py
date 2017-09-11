@@ -96,12 +96,12 @@ class UserLoginSerializer(ModelSerializer):
         username = data.get("username", None)
         email = data.get("email", None)
         password = data["password"]
-        if not email and username:  #if email and username not provided
+        if not email and not username:  #if email and username not provided
             raise ValidationError("Please provide email or password")
         user = User.objects.filter(    #searching the particular username or email
             Q(username=username) |
             Q(email=email)
-        ).distict()
+        )
         user = user.exclude(email__isnull=True).exclude(email__iexact='')  #excluding users with no email
         if user.exists() and user.count() == 1:
             user_obj = user.first()     #if user exists set to user_obj

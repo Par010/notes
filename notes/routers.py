@@ -1,5 +1,7 @@
 from rest_framework import routers
-from accounts.api.views import UserRegisterViewSet
+from accounts.api.views import (
+    UserRegisterViewSet)
 
 router = routers.SimpleRouter()
-router.register(r'userregister', UserRegisterViewSet)
+router.register(r'register', UserRegisterViewSet)
+# router.register(r'login', UserLoginViewSet.as_view())
