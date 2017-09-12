@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'note',
     #third party apps
     'rest_framework',
+    'multiselectfield',
 ]
 
 MIDDLEWARE = [
