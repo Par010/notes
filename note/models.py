@@ -11,5 +11,5 @@ class Note(models.Model):
     title = models.CharField(max_length=30)
     content_plain = models.TextField()
     create_date = models.DateField(auto_now_add=True)
-    reminder_date = models.DateTimeField(auto_now=False, auto_now_add=False)
+    reminder_date = models.DateTimeField(auto_now=False, auto_now_add=False, blank=True, null=True)
     tags = MultiSelectField(choices=TAGS, blank=True, null=True)

@@ -9,3 +9,10 @@ from note.models import Note
 class NoteSerializer(ModelSerializer):
     class Meta:
         model = Note
+        fields = [
+            'title',
+            'content_plain',
+            'create_date',
+            'reminder_date',
+            'tags',
+        ]
