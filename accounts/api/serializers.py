@@ -14,8 +14,8 @@ User = get_user_model()
 class UserRegisterSerializer(ModelSerializer):
     email = EmailField(label = 'Email')
     email2 = EmailField(label = 'Confirm Email', write_only=True) #to confirm email
-    password = CharField(style={'input-type' : 'password'}, label='Password', write_only=True)
-    password2 = CharField(style={'input-type' : 'password'}, label='Confirm Password', write_only=True) #to confirm password
+    password = CharField(style={'input-type' : 'password'}, label='Password', write_only=True, min_length=8)
+    password2 = CharField(style={'input-type' : 'password'}, label='Confirm Password', write_only=True, min_length=8) #to confirm password
     class Meta:
         model = User
         fields = [

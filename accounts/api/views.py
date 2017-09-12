@@ -33,6 +33,7 @@ User = get_user_model()
 
 class UserRegisterViewSet(
     mixins.CreateModelMixin,
+    # mixins.RetrieveModelMixin,
     GenericViewSet):
     serializer_class = UserRegisterSerializer
     permission_classes = [AllowAny]
