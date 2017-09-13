@@ -56,7 +56,7 @@ class NoteSerializer(ModelSerializer):
         # type(now)
         if obj.reminder_date == None:
             return False
-        elif reminder_sameformat <= now:
+        elif reminder_sameformat.strftime("%Y-%m-%d %H:%M:%S")  <= now.strftime("%Y-%m-%d %H:%M:%S") :
             return True
         else:
             return False

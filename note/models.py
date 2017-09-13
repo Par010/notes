@@ -1,6 +1,6 @@
 from django.db import models
 from django.conf import settings
-from django.utils import timezone
+from datetime import date
 from multiselectfield import MultiSelectField
 # Create your models here.
 TAGS = (('work', 'Work'),
@@ -13,7 +13,7 @@ class Note(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL,default=1, on_delete=models.CASCADE)
     title = models.CharField(max_length=30)
     content_plain = models.TextField()
-    create_date = models.DateField(default=timezone.now)
+    create_date = models.DateField(default=date.today())
     reminder_date = models.DateTimeField(auto_now=False, auto_now_add=False, blank=True, null=True)
     tags = MultiSelectField(choices=TAGS, blank=True, null=True)
     alert = models.BooleanField(default=False)
