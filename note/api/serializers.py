@@ -35,5 +35,9 @@ class NoteSerializer(ModelSerializer):
             # 'user_id'
         ]
 
+        extra_kwargs = {
+        'create_date' : {'read_only': True}
+        }
+
     # def get_user_id(self, obj):
     #     return obj.user.id
