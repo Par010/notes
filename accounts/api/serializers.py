@@ -19,12 +19,16 @@ class UserRegisterSerializer(ModelSerializer):
     class Meta:
         model = User
         fields = [
+            'id',
             'username',
             'email',
             'email2',
             'password',
             'password2',
         ]
+
+    def __str__(self):
+        return str(self.user.username)
 
     def validate(self, data):  # check if given email already exists
         email = data['email']

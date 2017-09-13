@@ -10,6 +10,7 @@ class NoteSerializer(ModelSerializer):
     class Meta:
         model = Note
         fields = [
+            # 'user',
             'title',
             'content_plain',
             'create_date',
