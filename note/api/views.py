@@ -21,7 +21,7 @@ class NoteViewSet(ModelViewSet):
     permission_classes = [IsOwner]
     filter_backends = [SearchFilter, OrderingFilter]
     search_fields = ['title', 'content_plain', 'tags']
-    ordering_fields = ['reminder_date','create_date']
+    ordering_fields = ['reminder_date','create_date', 'alert']
     ordering = ['-create_date']
     queryset = Note.objects.all()
     # lookup_field = 'user_id'

@@ -16,6 +16,7 @@ class Note(models.Model):
     create_date = models.DateField(default=timezone.now)
     reminder_date = models.DateTimeField(auto_now=False, auto_now_add=False, blank=True, null=True)
     tags = MultiSelectField(choices=TAGS, blank=True, null=True)
+    alert = models.BooleanField(default=False)
 
     # class Meta:
     #     ordering = ['-create_date']
