@@ -3,6 +3,7 @@ from rest_framework.serializers import (
     ModelSerializer,
     ValidationError,
     SerializerMethodField,
+    HyperlinkedIdentityField,
     MultipleChoiceField,
 )
 
@@ -13,14 +14,20 @@ TAGS = (('work', 'Work'),
           ('hobby', 'Hobby'),
           ('others', 'Others'))
 
+note_detail_url = HyperlinkedIdentityField(
+    view_name = 'note-detail',
+    read_only = True
+)
 class NoteSerializer(ModelSerializer):
     # user_id = SerializerMethodField()
+    url = note_detail_url
     tags = MultipleChoiceField(choices=TAGS, allow_blank=True)
     class Meta:
         model = Note
         fields = [
             # 'user',
             'title',
+            'url',
             'content_plain',
             'create_date',
             'reminder_date',

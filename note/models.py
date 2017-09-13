@@ -16,8 +16,8 @@ class Note(models.Model):
     reminder_date = models.DateTimeField(auto_now=False, auto_now_add=False, blank=True, null=True)
     tags = MultiSelectField(choices=TAGS, blank=True, null=True)
 
-    class Meta:
-        ordering = ['-create_date']
+    # class Meta:
+    #     ordering = ['-create_date']
 
     def __str__(self):
         return str(self.user.username)
