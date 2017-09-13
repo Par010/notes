@@ -26,8 +26,8 @@ class NoteSerializer(ModelSerializer):
         model = Note
         fields = [
             # 'user',
-            'title',
             'url',
+            'title',
             'content_plain',
             'create_date',
             'reminder_date',

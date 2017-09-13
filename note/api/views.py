@@ -3,6 +3,7 @@ from .serializers import NoteSerializer
 from note.models import Note
 from .permissions import IsOwner
 from rest_framework.response import Response
+# from django.db.models import Q
 from rest_framework.permissions import(
     AllowAny,
     IsAuthenticated,
@@ -17,17 +18,23 @@ from rest_framework.filters import (
 
 class NoteViewSet(ModelViewSet):
     serializer_class = NoteSerializer
+    permission_classes = [IsOwner]
     filter_backends = [SearchFilter, OrderingFilter]
     search_fields = ['title', 'content_plain', 'tags']
-    permission_classes = [IsOwner]
+    ordering_fields = ['reminder_date','create_date']
+    ordering = ['-create_date']
     queryset = Note.objects.all()
     # lookup_field = 'user_id'
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
 
-    def list(self, request):
-        user = request.user.id
-        queryset = Note.objects.filter(user=user)
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
         serializer = NoteSerializer(queryset, many=True, context={'request': request})
         return Response(serializer.data)
+
+    def get_queryset(self):
+        user = self.request.user.id
+        queryset = Note.objects.filter(user=user)
+        return queryset
