@@ -9,7 +9,7 @@ TAGS = (('work', 'Work'),
           ('others', 'Others'))
 
 class Note(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, default=1, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL,default=1, on_delete=models.CASCADE)
     title = models.CharField(max_length=30)
     content_plain = models.TextField()
     create_date = models.DateField(auto_now_add=True)
