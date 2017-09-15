@@ -8,6 +8,6 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^api/login', UserLoginViewSet.as_view(), name='login'),
     url(r'^api/', include(router.urls)),
-    url(r'^api/auth/token/', obtain_jwt_token),
+    url(r'^api/auth/token/', obtain_jwt_token),   #get jwt token
 
 ]

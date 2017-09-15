@@ -26,15 +26,14 @@ class NoteViewSet(ModelViewSet):
     ordering_fields = ['reminder_date','create_date', 'alert']
     ordering = ['-create_date']
     queryset = Note.objects.all()
-    # lookup_field = 'user_id'
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
 
     def list(self, request, *args, **kwargs):
-        queryset = self.filter_queryset(self.get_queryset())
+        queryset = self.filter_queryset(self.get_queryset())   #filtering the get_queryset
         serializer = NoteSerializer(queryset, many=True, context={'request': request})
-        page = self.paginate_queryset(queryset)
+        page = self.paginate_queryset(queryset)    #for pagination
         if page is not None:
             serializer = self.get_serializer(page, many=True)
             return self.get_paginated_response(serializer.data)
@@ -42,5 +41,5 @@ class NoteViewSet(ModelViewSet):
 
     def get_queryset(self):
         user = self.request.user.id
-        queryset = Note.objects.filter(user=user)
+        queryset = Note.objects.filter(user=user)   #get objects only associated with the requesting user
         return queryset

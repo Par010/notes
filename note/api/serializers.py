@@ -19,12 +19,12 @@ TAGS = (('work', 'Work'),
           ('others', 'Others'))
 
 note_detail_url = HyperlinkedIdentityField(
-    view_name = 'note-detail',
+    view_name = 'note-detail',      #url to detail view
     read_only = True
 )
 class NoteSerializer(ModelSerializer):
     # user_id = SerializerMethodField()
-    alert = SerializerMethodField()
+    alert = SerializerMethodField()  # boolean field to indicate reminder status
     url = note_detail_url
     tags = MultipleChoiceField(choices=TAGS, allow_blank=True)
     class Meta:
@@ -38,27 +38,24 @@ class NoteSerializer(ModelSerializer):
             'create_date',
             'reminder_date',
             'tags',
-            # 'user_id'
         ]
 
         extra_kwargs = {
-        'create_date' : {'read_only': True}
+        'create_date' : {'read_only': True}   #making create_date read_only
         }
 
     def get_alert(self, obj):
         local_tz = pytz.timezone('Asia/Kolkata')
-        now = datetime.datetime.utcnow().replace(tzinfo=utc).astimezone(local_tz)
+        now = datetime.datetime.utcnow().replace(tzinfo=utc).astimezone(local_tz)  #getting datetime with timezone info
         reminder = str(obj.reminder_date)
-        reminder_sameformat = dateparse.parse_datetime(reminder)
+        reminder_sameformat = dateparse.parse_datetime(reminder)  #converting ISO8601 format to default datetime format
         # print(reminder_sameformat)
         # print(now)
         # type(reminder_sameformat)
         # type(now)
         if obj.reminder_date == None:
             return False
-        elif reminder_sameformat.strftime("%Y-%m-%d %H:%M:%S")  <= now.strftime("%Y-%m-%d %H:%M:%S") :
+        elif reminder_sameformat.strftime("%Y-%m-%d %H:%M:%S")  <= now.strftime("%Y-%m-%d %H:%M:%S") :  #check if reminder time is behind current time, if yes set alert True
             return True
         else:
             return False
-    # def get_user_id(self, obj):
-    #     return obj.user.id
