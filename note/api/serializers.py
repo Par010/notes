@@ -24,7 +24,7 @@ note_detail_url = HyperlinkedIdentityField(
 )
 class NoteSerializer(ModelSerializer):
     # user_id = SerializerMethodField()
-    alert = SerializerMethodField(read_only=True)
+    alert = SerializerMethodField()
     url = note_detail_url
     tags = MultipleChoiceField(choices=TAGS, allow_blank=True)
     class Meta:
