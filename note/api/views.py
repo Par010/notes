@@ -20,7 +20,7 @@ from rest_framework.filters import (
 class NoteViewSet(ModelViewSet):
     serializer_class = NoteSerializer
     pagination_class = NotePageNumberPagination
-    permission_classes = [IsOwner]
+    permission_classes = [IsAuthenticated,IsOwner]
     filter_backends = [SearchFilter, OrderingFilter]
     search_fields = ['title', 'content_plain', 'tags']
     ordering_fields = ['reminder_date','create_date', 'alert']
