@@ -50,8 +50,8 @@ class NoteSerializer(ModelSerializer):
         now = datetime.datetime.utcnow().replace(tzinfo=utc).astimezone(local_tz)
         reminder = str(obj.reminder_date)
         reminder_sameformat = dateparse.parse_datetime(reminder)
-        print(reminder_sameformat)
-        print(now)
+        # print(reminder_sameformat)
+        # print(now)
         # type(reminder_sameformat)
         # type(now)
         if obj.reminder_date == None:
