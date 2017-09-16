@@ -10,3 +10,4 @@ class IsOwner(BasePermission):
         else:
             if obj.user == request.user:  # Check permissions for write request
                 return True
+# think about implementing admin permission for all notes irrespective of the user

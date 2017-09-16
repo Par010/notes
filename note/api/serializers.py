@@ -12,6 +12,8 @@ from django.utils.timezone import utc
 from django.utils import dateparse
 
 from note.models import Note
+
+# see since the code was not DRY things would have been difficult
 TAGS = (('work', 'Work'),
         ('school-college', 'School/College'),
           ('home', 'Home'),
@@ -53,6 +55,23 @@ class NoteSerializer(ModelSerializer):
         # print(now)
         # type(reminder_sameformat)
         # type(now)
+
+        """
+        all of the above stuff can be reduced by using simply pytz and datetime modules. readup on 
+        - datetime.strftime
+        - datetime.isoformat
+        
+        eg:
+        now = datetime.datetime.now(tz=pytz.timezone('Asia/Kolkata'))
+        iso = now.isoformat()
+        now_str = now.strftime('%Y-%m-%d, %H:%M:%S')
+        
+        yest = now - datetime.timedelta(days=1)
+        yest > now
+        # False
+        yest < now
+        # True
+        """
         if obj.reminder_date == None:
             return False
         elif reminder_sameformat.strftime("%Y-%m-%d %H:%M:%S")  <= now.strftime("%Y-%m-%d %H:%M:%S") :  #check if reminder time is behind current time, if yes set alert True

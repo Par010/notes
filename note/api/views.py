@@ -30,6 +30,7 @@ class NoteViewSet(ModelViewSet):
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
 
+    # see if you can minimize this code with just get_queryset or creating a superclass
     def list(self, request, *args, **kwargs):
         queryset = self.filter_queryset(self.get_queryset())   #filtering the get_queryset
         serializer = NoteSerializer(queryset, many=True, context={'request': request})

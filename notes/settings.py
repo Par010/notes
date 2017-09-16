@@ -18,7 +18,11 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
-
+"""
+Learn how to hide environment variables
+follow this guide
+www.marinamele.com/taskbuster-django-tutorial
+"""
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'qch&vs*km=^k6d!x=mkwae2jla=lq=v3x*6rn*p8u^05d1ikkq'
 
@@ -37,6 +41,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    # create new list for storing project apps
+
     'accounts',
     'note',
     #third party apps
