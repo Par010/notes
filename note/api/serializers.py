@@ -12,8 +12,8 @@ from django.utils.timezone import utc
 from django.utils import dateparse
 
 from note.models import Note
-TAGS = (('work', 'Work'),
-        ('school-college', 'School/College'),
+TAGS = (('work', 'Work'),#wo
+        ('school-college', 'School/College'),#sco
           ('home', 'Home'),
           ('hobby', 'Hobby'),
           ('others', 'Others'))
