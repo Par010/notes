@@ -3,11 +3,11 @@ from django.conf import settings
 from django.utils import timezone
 from multiselectfield import MultiSelectField
 # Create your models here.
-TAGS = (('work', 'Work'),
-          ('home', 'Home'),
-          ('school-college', 'School/College'),
-          ('hobby', 'Hobby'),
-          ('others', 'Others'))
+TAGS = (('wo', 'Work'),
+          ('hm', 'Home'),
+          ('cl', 'School/College'),
+          ('hb', 'Hobby'),
+          ('ot', 'Others'))
 
 class Checktext(models.Model):
     text = models.CharField(max_length=60)
@@ -28,7 +28,7 @@ class Checkcontent(models.Model):
 class Note(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL,default=1, on_delete=models.CASCADE)
     title = models.CharField(max_length=30)
-    content_plain = models.TextField()
+    content_plain = models.TextField(null=True, blank=True)
     checklist = models.ForeignKey(Checkcontent, blank=True, null=True, on_delete=models.CASCADE)
     create_date = models.DateField(default=timezone.now().date())
     reminder_date = models.DateTimeField(auto_now=False, auto_now_add=False, blank=True, null=True)
@@ -37,11 +37,13 @@ class Note(models.Model):
 
     @property
     def checklist_text(self):
-        return self.checklist.get_text()
+        if self.checklist != None:
+            return self.checklist.get_text()
 
     @property
     def checklist_checkbox(self):
-        return self.checklist.checkbox
+        if self.checklist != None:
+            return self.checklist.checkbox
     # class Meta:
     #     ordering = ['-create_date']
 

@@ -5,7 +5,10 @@ from rest_framework.serializers import (
     SerializerMethodField,
     HyperlinkedIdentityField,
     MultipleChoiceField,
-    ReadOnlyField
+    ReadOnlyField,
+    BooleanField,
+    ModelField,
+    PrimaryKeyRelatedField
 )
 import datetime
 import pytz
@@ -13,11 +16,11 @@ from django.utils.timezone import utc
 from django.utils import dateparse
 
 from note.models import Note
-TAGS = (('work', 'Work'),#wo
-        ('school-college', 'School/College'),#sco
-          ('home', 'Home'),
-          ('hobby', 'Hobby'),
-          ('others', 'Others'))
+TAGS = (('wo', 'Work'),#wo
+        ('cl', 'School/College'),#sco
+          ('hm', 'Home'),
+          ('hb', 'Hobby'),
+          ('ot', 'Others'))
 
 note_detail_url = HyperlinkedIdentityField(
     view_name = 'note-detail',      #url to detail view
@@ -28,8 +31,9 @@ class NoteSerializer(ModelSerializer):
     alert = SerializerMethodField()  # boolean field to indicate reminder status
     url = note_detail_url
     tags = MultipleChoiceField(choices=TAGS, allow_blank=True)
-    checklist_text = ReadOnlyField()
-    checklist_checkbox = ReadOnlyField()
+    # checklist = PrimaryKeyRelatedField(many=True, read_only=True)
+    checklist_text = CharField()
+    checklist_checkbox = BooleanField()
     class Meta:
         model = Note
         fields = [
@@ -38,6 +42,7 @@ class NoteSerializer(ModelSerializer):
             'alert',
             'title',
             'content_plain',
+            # 'checklist',
             'checklist_text',
             'checklist_checkbox',
             'create_date',
