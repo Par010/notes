@@ -5,6 +5,7 @@ from rest_framework.serializers import (
     SerializerMethodField,
     HyperlinkedIdentityField,
     MultipleChoiceField,
+    ReadOnlyField
 )
 import datetime
 import pytz
@@ -27,6 +28,8 @@ class NoteSerializer(ModelSerializer):
     alert = SerializerMethodField()  # boolean field to indicate reminder status
     url = note_detail_url
     tags = MultipleChoiceField(choices=TAGS, allow_blank=True)
+    checklist_text = ReadOnlyField()
+    checklist_checkbox = ReadOnlyField()
     class Meta:
         model = Note
         fields = [
@@ -35,6 +38,8 @@ class NoteSerializer(ModelSerializer):
             'alert',
             'title',
             'content_plain',
+            'checklist_text',
+            'checklist_checkbox',
             'create_date',
             'reminder_date',
             'tags',
