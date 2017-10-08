@@ -103,5 +103,5 @@ class NoteSerializer(ModelSerializer):
         # Note.objects.create(note=note, **checklists_data)
         for checklist_data in checklists_data:
             # Checkcontent.objects.create(note=note, **checklist_data)
-            Checkcontent.objects.create(note=note, **checklists_data)
+            Checkcontent.objects.create(note=note, **checklist_data)
         return note
