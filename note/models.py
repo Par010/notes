@@ -36,21 +36,22 @@ class Note(models.Model):
     def __str__(self):
         return str(self.user.username)
 
-
-class Checktext(models.Model):
-    text = models.CharField(max_length=60, null=True, blank=True, unique=True)
-
-    def __str__(self):
-        return self.text
+# class Checktext(models.Model):
+#     # note = models.ForeignKey(Note, related_name='checklists', default=0, on_delete=models.CASCADE)
+#     checkbox = models.BooleanField(default=False, unique=True)
+#     # check_text = models.ForeignKey(Checktext, default="", to_field='text', on_delete=models.CASCADE)
+#
+#     # def __str__(self):
+#     #     return self.check_text.text
+#     #
+#     # def get_text(self):
+#     #     return self.check_text.text
 
 
 class Checkcontent(models.Model):
     note = models.ForeignKey(Note, related_name='checklists', default=0, on_delete=models.CASCADE)
+    check_text = models.CharField(max_length=60, null=True, blank=True)
     checkbox = models.BooleanField(default=False)
-    check_text = models.ForeignKey(Checktext, default="", to_field='text', on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.check_text.text
-
-    def get_text(self):
-        return self.check_text.text
+        return self.check_text

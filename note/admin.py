@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Note, Checkcontent, Checktext
+from .models import Note, Checkcontent
 # Register your models here.
 
 class NoteModelAdmin(admin.ModelAdmin):
@@ -11,12 +11,16 @@ class NoteModelAdmin(admin.ModelAdmin):
         model = Note
 
 class CheckcontentModelAdmin(admin.ModelAdmin):
-    list_display = ['check_text', 'checkbox', 'note']
+    list_display = ['note', 'check_text', 'checkbox']
 
     class Meta:
         model = Checkcontent
 
+# class ChecktextModelAdmin(admin.ModelAdmin):
+#     list_display = ['checkbox']
+#     class Meta:
+#         model = Checktext
 
 admin.site.register(Note, NoteModelAdmin)
 admin.site.register(Checkcontent, CheckcontentModelAdmin)
-admin.site.register(Checktext)
+# admin.site.register(Checktext, ChecktextModelAdmin)

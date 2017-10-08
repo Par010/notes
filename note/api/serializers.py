@@ -27,6 +27,19 @@ note_detail_url = HyperlinkedIdentityField(
     read_only = True
 )
 
+# class ChecktextSerializer(ModelSerializer):
+#     class Meta:
+#         model = Checktext
+#         fields = [
+#             'text',
+#         ]
+
+    # def create(self, validated_data):
+    #     text = validated_data.get('text')
+    #     text_data = Checktext.objects.create(text=text)
+    #     return text_data
+
+
 class ChecklistSerializer(ModelSerializer):
     class Meta:
         model = Checkcontent
@@ -34,6 +47,14 @@ class ChecklistSerializer(ModelSerializer):
             'checkbox',
             'check_text'
         ]
+
+    # def create(self, validated_data):
+    #     check_text = validated_data.get('check_text')
+    #     check_text_data = Checkcontent.objects.create(check_text=check_text)
+    #     return check_text_data
+    # def create(self, validated_data):
+    #     check_text_data = validated_data('check_text')
+    #     Checkcontent.objects.create(check_text=check_text_data)
 
 class NoteSerializer(ModelSerializer):
     # user_id = SerializerMethodField()
@@ -98,10 +119,17 @@ class NoteSerializer(ModelSerializer):
     #     return note
     def create(self, validated_data):
         checklists_data = validated_data.pop('checklists')
+        # checklists_text = validated_data.pop('checklists__check_text')
         note = Note.objects.create(**validated_data)
         # Checkcontent.objects.create(note=note, **checklists_data)
         # Note.objects.create(note=note, **checklists_data)
+
         for checklist_data in checklists_data:
             # Checkcontent.objects.create(note=note, **checklist_data)
             Checkcontent.objects.create(note=note, **checklist_data)
         return note
+
+
+# for checklist_text in checklists_text:
+#     if Checktext.objects.filter(text=checklist_text) == None:
+#         Checktext.objects.create(text=checklist_text)
