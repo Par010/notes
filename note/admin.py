@@ -11,7 +11,7 @@ class NoteModelAdmin(admin.ModelAdmin):
         model = Note
 
 class CheckcontentModelAdmin(admin.ModelAdmin):
-    list_display = ['text', 'checkbox']
+    list_display = ['check_text', 'checkbox', 'note']
 
     class Meta:
         model = Checkcontent
