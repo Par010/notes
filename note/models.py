@@ -21,15 +21,15 @@ class Note(models.Model):
     tags = MultiSelectField(choices=TAGS, blank=True, null=True)
     alert = models.BooleanField(default=False)
 
-    @property
-    def checklist_text(self):
-        if self.checklist != None:
-            return self.checklist.get_text()
-
-    @property
-    def checklist_checkbox(self):
-        if self.checklist != None:
-            return self.checklist.checkbox
+    # @property
+    # def checklist_text(self):
+    #     if self.checklist != None:
+    #         return self.checklist.get_text()
+    #
+    # @property
+    # def checklist_checkbox(self):
+    #     if self.checklist != None:
+    #         return self.checklist.checkbox
     # class Meta:
     #     ordering = ['-create_date']
 
@@ -50,8 +50,12 @@ class Note(models.Model):
 
 class Checkcontent(models.Model):
     note = models.ForeignKey(Note, related_name='checklists', default=0, on_delete=models.CASCADE)
-    check_text = models.CharField(max_length=60, null=True, blank=True)
+    check_text = models.CharField(max_length=60, default=" ")
     checkbox = models.BooleanField(default=False)
 
     def __str__(self):
         return self.check_text
+
+
+# handle null on text
+# handle update view
