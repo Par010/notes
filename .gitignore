@@ -3,7 +3,7 @@ venv
 *.pyc
 staticfiles
 .env
-
+notes/old_settings.py
 notes/settings/local.py
 
 # Byte-compiled / optimized / DLL files
