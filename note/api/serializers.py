@@ -36,11 +36,10 @@ class ChecklistSerializer(ModelSerializer):
         ]
 
 class NoteSerializer(ModelSerializer):
-    # user_id = SerializerMethodField()
     alert = SerializerMethodField()  # boolean field to indicate reminder status
     url = note_detail_url
     tags = MultipleChoiceField(choices=TAGS, allow_blank=True)
-    checklists = ChecklistSerializer(many=True)
+    checklists = ChecklistSerializer(many=True)     #using nested serializer for checklists
 
 
     class Meta:
@@ -52,8 +51,6 @@ class NoteSerializer(ModelSerializer):
             'title',
             'content_plain',
             'checklists',
-            # 'checklist_text',
-            # 'checklist_checkbox',
             'create_date',
             'last_modified',
             'reminder_date',
@@ -82,40 +79,25 @@ class NoteSerializer(ModelSerializer):
 
     def create(self, validated_data):
         checklists_data = validated_data.pop('checklists')
-        # checklists_text = validated_data.pop('checklists__check_text')
         note = Note.objects.create(**validated_data)
-        # Checkcontent.objects.create(note=note, **checklists_data)
-        # Note.objects.create(note=note, **checklists_data)
-
         for checklist_data in checklists_data:
-            # Checkcontent.objects.create(note=note, **checklist_data)
-            Checkcontent.objects.create(note=note, **checklist_data)
+            Checkcontent.objects.create(note=note, **checklist_data)    #create checklist objects against a note
         return note
 
     def update(self, instance, validated_data):
-        # note = Note.objects.create(**validated_data)
         checklists_data = validated_data.pop('checklists')
-        checklist = instance.checklists
+        checklists = (instance.checklists).all()   #get all checklists objects
+        checklists = list(checklists)      #get the objects in list form
         instance.title = validated_data.get('title', instance.title)
         instance.content_plain = validated_data.get('content_plain', instance.content_plain)
         instance.reminder_date = validated_data.get('reminder_date', instance.reminder_date)
         instance.tags = validated_data.get('tags', instance.tags)
-        # note = Note.objects.create(**validated_data)
         instance.save()
-        # instance.checkbox = validated_data.get('checkbox', instance.checkbox)
-        # instance.check_text = validated_data.get('check_text', instance.check_text)
+
         for checklist_data in checklists_data:
-            checklist.checkbox = checklist_data.get(
-                'checkbox',
-                checklist.checkbox
-            )
-            checklist.check_text = checklist_data.get(
-                'check_text',
-                checklist.check_text
-            )
-            checklist.save()
-        # for checklist_data in checklists_data:
-        #     checklist_data, created = Checkcontent.objects.get_or_create(checkbox=checklist_data['checkbox'])
-        #     checklist_data, created = Checkcontent.objects.get_or_create(check_text=checklist_data['check_text'])
-        #     note.checklists.add(checklist_data)
+            checklist = checklists.pop(0)       #one checklists object chosen at a time by pop
+            checklist.checkbox = checklist_data.get('checkbox', checklist.checkbox)  #get checkbox for that object
+            checklist.check_text = checklist_data.get('check_text', checklist.check_text)    #get check_text for that object
+            checklist.save()    #save the object
+
         return instance

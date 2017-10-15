@@ -16,11 +16,6 @@ class CheckcontentModelAdmin(admin.ModelAdmin):
     class Meta:
         model = Checkcontent
 
-# class ChecktextModelAdmin(admin.ModelAdmin):
-#     list_display = ['checkbox']
-#     class Meta:
-#         model = Checktext
 
 admin.site.register(Note, NoteModelAdmin)
 admin.site.register(Checkcontent, CheckcontentModelAdmin)
-# admin.site.register(Checktext, ChecktextModelAdmin)
