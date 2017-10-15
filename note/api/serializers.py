@@ -55,6 +55,7 @@ class NoteSerializer(ModelSerializer):
             # 'checklist_text',
             # 'checklist_checkbox',
             'create_date',
+            'last_modified',
             'reminder_date',
             'tags',
         ]
@@ -99,10 +100,10 @@ class NoteSerializer(ModelSerializer):
         instance.content_plain = validated_data.get('content_plain', instance.content_plain)
         instance.reminder_date = validated_data.get('reminder_date', instance.reminder_date)
         instance.tags = validated_data.get('tags', instance.tags)
-        note = Note.objects.create(**validated_data)
+        # note = Note.objects.create(**validated_data)
         instance.save()
-        instance.checkbox = validated_data.get('checkbox', instance.checkbox)
-        instance.check_text = validated_data.get('check_text', instance.check_text)
+        # instance.checkbox = validated_data.get('checkbox', instance.checkbox)
+        # instance.check_text = validated_data.get('check_text', instance.check_text)
         for checklist_data in checklists_data:
             checklist.checkbox = checklist_data.get(
                 'checkbox',
@@ -112,9 +113,9 @@ class NoteSerializer(ModelSerializer):
                 'check_text',
                 checklist.check_text
             )
-        checklist.save()
+            checklist.save()
         # for checklist_data in checklists_data:
         #     checklist_data, created = Checkcontent.objects.get_or_create(checkbox=checklist_data['checkbox'])
         #     checklist_data, created = Checkcontent.objects.get_or_create(check_text=checklist_data['check_text'])
         #     note.checklists.add(checklist_data)
-        # return instance
+        return instance

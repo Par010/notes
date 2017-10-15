@@ -18,7 +18,7 @@ class Note(models.Model):
     # checklist = models.ForeignKey(Checkcontent, blank=True, null=True, on_delete=models.CASCADE)
     create_date = models.DateField(default=timezone.now().date())
     reminder_date = models.DateTimeField(auto_now=False, auto_now_add=False, blank=True, null=True)
-    # last_modified = models.DateTimeField(auto_now=True)
+    last_modified = models.DateTimeField(auto_now=True, auto_now_add=False, blank=True, null=True)
     tags = MultiSelectField(choices=TAGS, blank=True, null=True)
     alert = models.BooleanField(default=False)
 
