@@ -27,19 +27,6 @@ note_detail_url = HyperlinkedIdentityField(
     read_only = True
 )
 
-# class ChecktextSerializer(ModelSerializer):
-#     class Meta:
-#         model = Checktext
-#         fields = [
-#             'text',
-#         ]
-
-    # def create(self, validated_data):
-    #     text = validated_data.get('text')
-    #     text_data = Checktext.objects.create(text=text)
-    #     return text_data
-
-
 class ChecklistSerializer(ModelSerializer):
     class Meta:
         model = Checkcontent
@@ -48,23 +35,14 @@ class ChecklistSerializer(ModelSerializer):
             'check_text'
         ]
 
-    # def create(self, validated_data):
-    #     check_text = validated_data.get('check_text')
-    #     check_text_data = Checkcontent.objects.create(check_text=check_text)
-    #     return check_text_data
-    # def create(self, validated_data):
-    #     check_text_data = validated_data('check_text')
-    #     Checkcontent.objects.create(check_text=check_text_data)
-
 class NoteSerializer(ModelSerializer):
     # user_id = SerializerMethodField()
     alert = SerializerMethodField()  # boolean field to indicate reminder status
     url = note_detail_url
     tags = MultipleChoiceField(choices=TAGS, allow_blank=True)
     checklists = ChecklistSerializer(many=True)
-    # checklist = PrimaryKeyRelatedField(many=True, read_only=True)
-    # checklist_text = PrimaryKeyRelatedField(many=True, read_only=True)
-    # checklist_checkbox = PrimaryKeyRelatedField(many=True, read_only=True)
+
+
     class Meta:
         model = Note
         fields = [
@@ -101,22 +79,6 @@ class NoteSerializer(ModelSerializer):
         else:
             return False
 
-    # def create(self, validated_data):  #overriding create method to handle foreign key
-    #     # note = Note.objects.create(
-    #     #     url = validated_data['url'],
-    #     #     alert = validated_data['alert'],
-    #     #     title = validated_data['title'],
-    #     #     content_plain = validated_data['content_plain'],
-    #     #     create_date = validated_data['create_date'],
-    #     #     reminder_date = validated_data['reminder_date'],
-    #     #     tags = validated_data['tags']
-    #     # )
-    #     note = Note.objects.create(**validated_data)
-    #     checklist_text = validated_data.pop('checklist_text', None)
-    #     checklist_checkbox = validated_data.pop('checklist_checkbox', None)
-    #     checklist_text_create = Checkcontent.objects.create(note=note,**checklist_text)
-    #     checklist_checkbox_create = Checkcontent.objects.create(note=note,**checklist_checkbox)
-    #     return note
     def create(self, validated_data):
         checklists_data = validated_data.pop('checklists')
         # checklists_text = validated_data.pop('checklists__check_text')
@@ -129,7 +91,30 @@ class NoteSerializer(ModelSerializer):
             Checkcontent.objects.create(note=note, **checklist_data)
         return note
 
-
-# for checklist_text in checklists_text:
-#     if Checktext.objects.filter(text=checklist_text) == None:
-#         Checktext.objects.create(text=checklist_text)
+    def update(self, instance, validated_data):
+        # note = Note.objects.create(**validated_data)
+        checklists_data = validated_data.pop('checklists')
+        checklist = instance.checklists
+        instance.title = validated_data.get('title', instance.title)
+        instance.content_plain = validated_data.get('content_plain', instance.content_plain)
+        instance.reminder_date = validated_data.get('reminder_date', instance.reminder_date)
+        instance.tags = validated_data.get('tags', instance.tags)
+        note = Note.objects.create(**validated_data)
+        instance.save()
+        instance.checkbox = validated_data.get('checkbox', instance.checkbox)
+        instance.check_text = validated_data.get('check_text', instance.check_text)
+        for checklist_data in checklists_data:
+            checklist.checkbox = checklist_data.get(
+                'checkbox',
+                checklist.checkbox
+            )
+            checklist.check_text = checklist_data.get(
+                'check_text',
+                checklist.check_text
+            )
+        checklist.save()
+        # for checklist_data in checklists_data:
+        #     checklist_data, created = Checkcontent.objects.get_or_create(checkbox=checklist_data['checkbox'])
+        #     checklist_data, created = Checkcontent.objects.get_or_create(check_text=checklist_data['check_text'])
+        #     note.checklists.add(checklist_data)
+        # return instance
