@@ -15,7 +15,7 @@ import pytz
 from django.utils.timezone import utc
 from django.utils import dateparse
 
-from note.models import Note, Checkcontent
+from note.models import Note, Checkcontent, Othertags
 TAGS = (('wo', 'Work'),#wo
         ('cl', 'School/College'),#sco
           ('hm', 'Home'),
@@ -35,12 +35,21 @@ class ChecklistSerializer(ModelSerializer):
             'check_text'
         ]
 
+
+class OthertagsSerializer(ModelSerializer):
+    class Meta:
+        model = Othertags
+        fields = [
+            'tag'
+        ]
+
+
 class NoteSerializer(ModelSerializer):
     alert = SerializerMethodField()  # boolean field to indicate reminder status
     url = note_detail_url
     tags = MultipleChoiceField(choices=TAGS, allow_blank=True)
     checklists = ChecklistSerializer(many=True)     #using nested serializer for checklists
-
+    user_tags = OthertagsSerializer(many=True)
 
     class Meta:
         model = Note
@@ -55,6 +64,7 @@ class NoteSerializer(ModelSerializer):
             'last_modified',
             'reminder_date',
             'tags',
+            'user_tags',
         ]
 
         extra_kwargs = {
@@ -79,15 +89,21 @@ class NoteSerializer(ModelSerializer):
 
     def create(self, validated_data):
         checklists_data = validated_data.pop('checklists')
+        user_tags_data = validated_data.pop('user_tags')
         note = Note.objects.create(**validated_data)
         for checklist_data in checklists_data:
             Checkcontent.objects.create(note=note, **checklist_data)    #create checklist objects against a note
+        for user_tag_data in user_tags_data:
+            Othertags.objects.create(note=note, **user_tag_data)
         return note
 
     def update(self, instance, validated_data):
         checklists_data = validated_data.pop('checklists')
         checklists = (instance.checklists).all()   #get all checklists objects
         checklists = list(checklists)      #get the objects in list form
+        user_tags_data = validated_data.pop('user_tags')
+        user_tags = (instance.user_tags).all()
+        user_tags = list(user_tags)
         instance.title = validated_data.get('title', instance.title)
         instance.content_plain = validated_data.get('content_plain', instance.content_plain)
         instance.reminder_date = validated_data.get('reminder_date', instance.reminder_date)
@@ -99,5 +115,10 @@ class NoteSerializer(ModelSerializer):
             checklist.checkbox = checklist_data.get('checkbox', checklist.checkbox)  #get checkbox for that object
             checklist.check_text = checklist_data.get('check_text', checklist.check_text)    #get check_text for that object
             checklist.save()    #save the object
+
+        for user_tag_data in user_tags_data:
+            user_tag = user_tags.pop(0)
+            user_tag.tag = user_tag_data.get('tag', user_tag.tag)
+            user_tag.save()
 
         return instance

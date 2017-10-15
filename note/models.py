@@ -31,3 +31,10 @@ class Checkcontent(models.Model):
 
     def __str__(self):
         return self.check_text
+
+class Othertags(models.Model):
+    note = models.ForeignKey(Note, related_name='user_tags', default=0, on_delete=models.CASCADE)
+    tag = models.CharField(max_length=30, blank=True, null=True)
+
+    def __str__(self):
+        return self.tag

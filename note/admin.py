@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Note, Checkcontent
+from .models import Note, Checkcontent, Othertags
 # Register your models here.
 
 class NoteModelAdmin(admin.ModelAdmin):
@@ -7,6 +7,7 @@ class NoteModelAdmin(admin.ModelAdmin):
     list_display_links = ['user', 'title']
     list_filter = ['create_date', 'reminder_date', 'user__username', 'last_modified']
     search_fields = ['user__username', 'title', 'content_plain']
+
     class Meta:
         model = Note
 
@@ -18,5 +19,14 @@ class CheckcontentModelAdmin(admin.ModelAdmin):
         model = Checkcontent
 
 
+class OthertagsModelAdmin(admin.ModelAdmin):
+    list_display = ['note', 'tag']
+    raw_id_fields = ['note']
+
+    class Meta:
+        model = Othertags
+
+
 admin.site.register(Note, NoteModelAdmin)
 admin.site.register(Checkcontent, CheckcontentModelAdmin)
+admin.site.register(Othertags, OthertagsModelAdmin)

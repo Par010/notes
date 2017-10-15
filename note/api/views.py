@@ -23,7 +23,7 @@ class NoteViewSet(ModelViewSet):
     pagination_class = NotePageNumberPagination
     permission_classes = [IsAuthenticated,IsOwner]
     filter_backends = [SearchFilter, OrderingFilter]
-    search_fields = ['title', 'content_plain', 'tags']
+    search_fields = ['title', 'content_plain', 'tags', 'user_tags__tag', 'checklists__check_text']
     ordering_fields = ['last_modified','reminder_date','create_date']
     ordering = ['-last_modified','-create_date']
     queryset = Note.objects.all()
