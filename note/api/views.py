@@ -36,7 +36,7 @@ class NoteViewSet(ModelViewSet):
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
     def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
+        serializer.save(user=self.request.user) #saving against the user making the object
 
     def list(self, request, *args, **kwargs):
         queryset = self.filter_queryset(self.get_queryset())   #filtering the get_queryset

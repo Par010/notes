@@ -10,7 +10,6 @@ TAGS = (('wo', 'Work'),
           ('ot', 'Others'))
 
 
-
 class Note(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL,default=1, on_delete=models.CASCADE)
     title = models.CharField(max_length=30)
@@ -20,7 +19,6 @@ class Note(models.Model):
     last_modified = models.DateTimeField(auto_now=True, auto_now_add=False, blank=True, null=True)
     tags = MultiSelectField(choices=TAGS, blank=True, null=True)
     alert = models.BooleanField(default=False)
-
 
     def __str__(self):
         return str(self.user.username)
