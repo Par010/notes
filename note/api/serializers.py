@@ -122,3 +122,6 @@ class NoteSerializer(ModelSerializer):
             user_tag.save()
 
         return instance
+
+
+#reminder update
